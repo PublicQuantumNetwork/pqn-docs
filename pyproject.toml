@@ -1,0 +1,9 @@
+[project]
+name = "pqn-docs"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "sphinx",
+    "pydata-sphinx-theme",
+    "myst-parser",
+]
