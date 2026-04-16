@@ -42,6 +42,16 @@ Installation, configuration, and architecture of the Next.js web interface (`pqn
 frontend/index
 ```
 
+## Hardware
+
+3D-printable polarimeter components and assembly instructions for building a PQN node instrument.
+
+```{toctree}
+:maxdepth: 2
+
+hardware/index
+```
+
 ## Contributing
 
 How to contribute to the PQN project.
