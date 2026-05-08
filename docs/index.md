@@ -6,58 +6,25 @@ myst:
 
 # Public Quantum Network
 
-Welcome to the documentation for the **Public Quantum Network (PQN)** — a distributed quantum network system designed to make quantum computing and quantum experiments accessible to the general public.
+Welcome to the documentation for the **Public Quantum Network (PQN)** — a federation of physical sites that lets the general public run real quantum experiments through a web interface.
 
-The PQN allows users to interact with real quantum hardware through a web interface, running experiments such as Bell tests, quantum key distribution, and quantum random number generation.
+The codebase is split across three packages:
 
-> **Early Development**: This project is in early stages of development. APIs, installation procedures, and distribution methods are subject to change.
+- **[pqn-node](https://github.com/PublicQuantumNetwork/pqn-node)** — the FastAPI service that runs at each site
+- **[pqn-gui](https://github.com/PublicQuantumNetwork/pqn-gui)** — the public-facing web interface
+- **[pqn-hardware](https://github.com/PublicQuantumNetwork/pqn-hardware)** — instrument drivers, ZMQ messaging, and quantum protocols
 
-## Overview
-
-Project description, supported experiments, and acknowledgements.
+> **Early Development**: This project is in early stages. APIs, installation procedures, and distribution methods are subject to change.
 
 ```{toctree}
 :maxdepth: 2
+:hidden:
 
 overview/index
-```
-
-## Backend
-
-Installation, configuration, and architecture of the Python backend stack (`pqn-stack`).
-
-```{toctree}
-:maxdepth: 2
-
-backend/index
-```
-
-## Frontend
-
-Installation, configuration, and architecture of the Next.js web interface (`pqn-gui`).
-
-```{toctree}
-:maxdepth: 2
-
-frontend/index
-```
-
-## Hardware
-
-3D-printable polarimeter components and assembly instructions for building a PQN node instrument.
-
-```{toctree}
-:maxdepth: 2
-
-hardware/index
-```
-
-## Contributing
-
-How to contribute to the PQN project.
-
-```{toctree}
-:maxdepth: 2
-
+deployment/index
+pqn-node/index
+pqn-gui/index
+pqn-hardware/index
+physical-devices/index
 contributing/index
 ```

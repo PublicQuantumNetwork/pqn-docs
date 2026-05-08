@@ -4,7 +4,7 @@ Step-by-step guide for assembling the PQN polarimeter optomechanics.
 
 ## 1. Attach magnet to base
 
-```{image} ../_static/hardware/Magnet+Base.gif
+```{image} ../../_static/polarimeter/Magnet+Base.gif
 :alt: Attaching adhesive magnet to base
 :width: 250px
 :align: center
@@ -16,7 +16,7 @@ Apply an adhesive magnet to the bottom of the base.
 
 ## 2. Insert post into base
 
-```{image} ../_static/hardware/Post+Base.gif
+```{image} ../../_static/polarimeter/Post+Base.gif
 :alt: Merging post with base
 :width: 250px
 :align: center
@@ -28,7 +28,7 @@ Apply gentle force to press the post into the base until it friction-fits secure
 
 ## 3. Load polarizer or retardation film into mount
 
-```{image} ../_static/hardware/film-mount.gif
+```{image} ../../_static/polarimeter/film-mount.gif
 :alt: Loading film into mount
 :width: 250px
 :align: center
@@ -42,7 +42,7 @@ Cut the film to a 1-inch diameter. Slide it into the slot on the mount — the c
 
 ## 4. Load Fresnel lens into mount
 
-```{image} ../_static/hardware/lens-mount.gif
+```{image} ../../_static/polarimeter/lens-mount.gif
 :alt: Loading lens into mount
 :width: 250px
 :align: center
@@ -54,7 +54,7 @@ Open the mount slot and gently slide the lens in. The clamping filament holds th
 
 ## 5. Attach mirror to mount
 
-```{image} ../_static/hardware/Mirror.gif
+```{image} ../../_static/polarimeter/Mirror.gif
 :alt: Attaching mirror to mount
 :width: 250px
 :align: center
@@ -66,7 +66,7 @@ Press the adhesive side of the mirror against one face of the mount, then peel o
 
 ## 6. Insert laser into mount
 
-```{image} ../_static/hardware/laser.gif
+```{image} ../../_static/polarimeter/laser.gif
 :alt: Inserting laser into mount
 :width: 250px
 :align: center
@@ -80,7 +80,7 @@ Push the laser (11 mm diameter) into the mount hole.
 
 ## 7. Attach beam splitter to mount
 
-```{image} ../_static/hardware/BS.gif
+```{image} ../../_static/polarimeter/BS.gif
 :alt: Inserting beam splitter into mount
 :width: 250px
 :align: center
@@ -92,7 +92,7 @@ Slide the 1 mm beam splitter into the dedicated mount slot.
 
 ## 8. Attach any mount to a post
 
-```{image} ../_static/hardware/mount-to-post.gif
+```{image} ../../_static/polarimeter/mount-to-post.gif
 :alt: Attaching mount to post
 :width: 250px
 :align: center

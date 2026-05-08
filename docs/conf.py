@@ -1,8 +1,8 @@
 project = 'Public Quantum Network'
-copyright = '2026, Benjamin Nussbaum, Marcos Frenkel, Soroush Hoseini'
-author = 'Benjamin Nussbaum, Marcos Frenkel, Soroush Hoseini'
+copyright = '2026, Public Quantum Network'
+author = 'Public Quantum Network Team'
 
-extensions = ['myst_parser']
+extensions = ['myst_parser', 'sphinxcontrib.mermaid']
 
 templates_path = ['_templates']
 exclude_patterns = ['build']
@@ -19,12 +19,16 @@ html_theme_options = {
     },
     "external_links": [
         {
-            "url": "https://github.com/PublicQuantumNetwork/pqn-stack",
-            "name": "pqn-stack",
+            "url": "https://github.com/PublicQuantumNetwork/pqn-node",
+            "name": "pqn-node",
         },
         {
             "url": "https://github.com/PublicQuantumNetwork/pqn-gui",
             "name": "pqn-gui",
+        },
+        {
+            "url": "https://github.com/PublicQuantumNetwork/pqn-hardware",
+            "name": "pqn-hardware",
         },
     ],
     "icon_links": [

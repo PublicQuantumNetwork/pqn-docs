@@ -6,8 +6,9 @@ Thank you for your interest in contributing to the Public Quantum Network!
 
 | Repository | Description |
 |---|---|
-| [pqn-stack](https://github.com/PublicQuantumNetwork/pqn-stack) | Python backend stack |
-| [pqn-gui](https://github.com/PublicQuantumNetwork/pqn-gui) | Next.js frontend |
+| [pqn-node](https://github.com/PublicQuantumNetwork/pqn-node) | FastAPI Node service |
+| [pqn-gui](https://github.com/PublicQuantumNetwork/pqn-gui) | Next.js public web interface |
+| [pqn-hardware](https://github.com/PublicQuantumNetwork/pqn-hardware) | Instrument drivers, ZMQ messaging, and quantum protocols |
 | [pqn-docs](https://github.com/PublicQuantumNetwork/pqn-docs) | This documentation site |
 
 ## Contributing to the Docs
@@ -43,10 +44,13 @@ Open `docs/build/html/index.html` in your browser to preview the result.
 - Keep technical jargon to a minimum or define it when first used
 - Use tables for configuration references and command comparisons
 
-## Contributing to the Backend or Frontend
+## Contributing to a Package
 
 Please refer to the `CONTRIBUTING.md` file in each repository:
-- [pqn-stack/CONTRIBUTING.md](https://github.com/PublicQuantumNetwork/pqn-stack/blob/master/CONTRIBUTING.md)
+
+- [pqn-node](https://github.com/PublicQuantumNetwork/pqn-node)
+- [pqn-gui](https://github.com/PublicQuantumNetwork/pqn-gui)
+- [pqn-hardware/CONTRIBUTING.md](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/CONTRIBUTING.md)
 
 ## Contact
 

@@ -1,40 +1,46 @@
 # Overview
 
+```{toctree}
+:hidden:
+
+software-map
+```
+
 ## What is the PQN?
 
-The Public Quantum Network (PQN) is a distributed quantum network system that enables the general public to interact with real quantum hardware through a lightweight web interface. Visitors can run quantum experiments — including entanglement verification, quantum key distribution, and quantum random number generation — without any prior knowledge of quantum mechanics.
+The Public Quantum Network (PQN) is a federation of physical sites — called **Nodes** — that expose real quantum experiments to the general public through a lightweight web interface. A visitor with no background in quantum mechanics can walk up to a Node, click through an experiment in the browser, and watch real photons being measured in real time.
 
-The network is built around a **node-based architecture**: each PQN node consists of a backend software stack (`pqn-stack`) managing hardware and protocols, and a frontend web interface (`pqn-gui`) for public interaction.
+Each Node is a self-contained backend stack running on a small intranet. Nodes can talk to each other over the public internet to run multi-Node experiments such as the CHSH Bell test. The web interface (the GUI) is an optional client — every Experiment can also be run programmatically.
+
+For the canonical glossary of terms used throughout the docs (Node, Node API, Hardware Provider, Protocol, Experiment, …), see {doc}`software-map` and the project's `CONTEXT.md`.
 
 ## Supported Experiments
 
 | Experiment | Description |
 |---|---|
-| **CHSH Bell Test** | Verifies quantum entanglement by testing Bell inequalities between two nodes |
+| **CHSH Bell Test** | Verifies quantum entanglement by testing Bell inequalities between two Nodes |
 | **Quantum Key Distribution (QKD)** | Generates a shared secret key between two parties using quantum mechanics |
 | **Quantum Fortune** | Generates random numbers using quantum randomness |
-| **Secret Message Sharing (SSM)** | Sends a secret message encoded with quantum-generated keys |
-| **Tomography** | Characterizes quantum states via state tomography |
+| **Secret Message Sharing (SSM)** | Sends a secret message encoded with a quantum-generated key |
+| **Tomography** | Characterises quantum states via state tomography |
 | **Visibility** | Measures the visibility of quantum interference fringes |
 
-## Architecture
+## How the software fits together
 
-The PQN uses a two-repo architecture:
+The system is split across three packages plus a set of physical devices:
 
-- **[pqn-stack](https://github.com/PublicQuantumNetwork/pqn-stack)**: Python backend that manages quantum hardware, protocols, and node-to-node communication via a FastAPI server.
-- **[pqn-gui](https://github.com/PublicQuantumNetwork/pqn-gui)**: Next.js frontend providing the public-facing web interface.
+- **`pqn-node`** — the FastAPI service that runs at each Node. The Node API; the brain of the Node.
+- **`pqn-gui`** — the Next.js web interface. Talks to a single Node API, typically over localhost.
+- **`pqn-hardware`** — the Python library used by `pqn-node` to drive instruments, route ZMQ messages, and execute quantum protocols.
+- **Physical devices** — the polarimeters, time taggers, rotators, and lasers that physically perform the measurements.
 
-See the {doc}`../backend/architecture` and {doc}`../frontend/architecture` pages for details.
+For the full mental model — diagrams of the network, a single Node, and the request flow through the system — see the {doc}`software-map`.
 
-## Hardware Requirements
+## Hardware requirements
 
-Running the full PQN stack currently requires physical quantum hardware components:
+Running a Node currently requires real quantum-optics hardware: a TimeTagger, polarisation rotators, and a polarimeter. Dummy drivers exist for software-only development, but full Experiment functionality requires physical instruments.
 
-- **TimeTagger**: Photon detection timing device
-- **Rotators / Rotary Encoders**: Polarization basis rotation control (e.g., half-wave plates)
-- **Polarimeter**: Photon polarization measurement
-
-Dummy instrument drivers are available for software-only testing, but full experiment functionality requires real hardware.
+See {doc}`../physical-devices/index` for build guides for the physical components.
 
 ## Acknowledgements
 
