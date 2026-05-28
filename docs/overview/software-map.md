@@ -1,31 +1,42 @@
 # Software Map
 
-This page is the top-level mental map of the Public Quantum Network: how the whole system hangs together, how a single Node is structured internally, where each package fits, and how a real request flows through the stack. It is intended for new contributors and for maintainers of PQN clones who need to internalise the architecture quickly.
+This page is the top-level mental map of the Public Quantum Network: how the whole system fits together, how a single Node is structured, where each package lives, and how a real request flows through everything.
 
-For a full glossary of the terms used here — Node, Node API, Hardware Provider, ProxyInstrument, Protocol, Experiment, GUI — see `CONTEXT.md` at the repository root.
+```{note}
+For a glossary of the terms used here (Node, Node API, Hardware Provider, ProxyInstrument, Protocol, Experiment, GUI), see `CONTEXT.md` at the repository root.
 
-Deeper, package-specific architecture details live under {doc}`../pqn-node/index`, {doc}`../pqn-gui/index`, and {doc}`../pqn-hardware/index`. Operator-focused setup details live under {doc}`../deployment/index`.
+Deeper, package-specific details live under {doc}`../pqn-node/index`, {doc}`../pqn-gui/index`, and {doc}`../pqn-hardware/index`. Operator-focused setup lives under {doc}`../deployment/index`.
+```
 
 ## 1. The PQN Network
 
-The PQN is a federation of independent **Nodes**. Each Node is a self-contained backend deployment at one physical site. Nodes talk to each other over the public internet to run multi-Node Experiments. Public visitors interact with a Node through the **GUI**, which is just a client of the Node API — it sits outside the Node itself and can run anywhere that has network access to the Node.
+At the network level the PQN is a small group of optical labs scattered across a few institutions. Each lab is a **Node**: it can run quantum experiments end to end on its own, and any pair of Nodes that have been physically connected can team up on experiments that need two sites at once, like the CHSH Bell test.
+
+Connecting two Nodes takes two channels. Classically, like normal computers, every Node sits on a shared VPN that links all the participating sites. Quantumly, the two labs are physically joined by an optical fibre that lets them exchange entangled photons. The fibre carries the quantum state of the experiment; the VPN carries the classical bookkeeping the two Nodes need to agree on what they measured.
+
+A visitor meets a Node through its **GUI**, a small web app that runs alongside the Node API. The GUI is the part of the PQN that the public actually sees.
 
 ```{mermaid}
 flowchart LR
-    subgraph NodeA["Node A (site)"]
+    GUIA[GUI]:::client
+    GUIB[GUI]:::client
+    subgraph NodeA["Node A"]
         APIA[Node API]
+        InstrA[(Optical<br/>hardware)]
     end
-    subgraph NodeB["Node B (site)"]
+    subgraph NodeB["Node B"]
         APIB[Node API]
+        InstrB[(Optical<br/>hardware)]
     end
-    GUIA[GUI / browser]
-    GUIB[GUI / browser]
-    GUIA -.HTTP / WebSocket.-> APIA
-    GUIB -.HTTP / WebSocket.-> APIB
-    APIA <-.peer-to-peer.-> APIB
+    GUIA -.HTTP.-> APIA
+    GUIB -.HTTP.-> APIB
+    APIA <==>|"classical (VPN)"| APIB
+    InstrA <==>|"quantum (optical fibre)"| InstrB
+
+    classDef client fill:#fff3e0,stroke:#b36b1f;
 ```
 
-The Node API is the only component of a Node that is reachable from outside the local intranet. Everything else — Router, Hardware Providers, drivers, instruments — sits on a private network and is only reachable through the Node API.
+Inside a Node, the Node API is the only component that ever talks to anything outside the Node. Everything else (Router, Hardware Providers, drivers, instruments) lives on the Node's local network and is reachable only through the Node API. Nothing in the PQN is exposed to the public internet.
 
 ## 2. A single Node
 
@@ -64,12 +75,12 @@ flowchart TB
     classDef ext fill:#eee,stroke:#888,stroke-dasharray: 4 2;
 ```
 
-- **Node API** (in `pqn-node`) — FastAPI service. The only component reachable from outside. Handles GUI requests and peer-Node coordination. Owns the orchestration logic for each Experiment.
-- **Router** (in `pqn-hardware`) — ZMQ message broker. All in-Node messaging passes through it.
-- **Hardware Provider** (in `pqn-hardware`) — process that hosts physical instruments. A Node can run more than one Provider; for example, one machine per optics table or per piece of expensive hardware.
-- **Driver** (in `pqn-hardware`) — concrete instrument implementation. Talks to one piece of physical hardware (Thorlabs rotator, TimeTagger, etc.).
+- **Node API** (in `pqn-node`): FastAPI service. The only component reachable from outside. Handles GUI requests and peer-Node coordination. Owns the orchestration logic for each Experiment.
+- **Router** (in `pqn-hardware`): ZMQ message broker. All in-Node messaging passes through it.
+- **Hardware Provider** (in `pqn-hardware`): process that hosts physical instruments. A Node can run more than one Provider; for example, one machine per optics table or per piece of expensive hardware.
+- **Driver** (in `pqn-hardware`): concrete instrument implementation. Talks to one piece of physical hardware (Thorlabs rotator, TimeTagger, etc.).
 
-The Node API never talks to a Driver directly. It calls a **ProxyInstrument** — a client-side handle whose method calls are serialised onto the Router and dispatched to whichever Hardware Provider hosts the real instrument. This means the Node API code does not need to know which machine an instrument is plugged into.
+The Node API never talks to a Driver directly. It calls a **ProxyInstrument**, a client-side handle whose method calls are serialised onto the Router and dispatched to whichever Hardware Provider hosts the real instrument. This means the Node API code does not need to know which machine an instrument is plugged into.
 
 ## 3. The three packages
 
@@ -128,12 +139,12 @@ sequenceDiagram
 
 Two things to notice:
 
-1. **ProxyInstruments hide the network.** From the Protocol's point of view, calling an instrument looks like a local method call — but the call is actually marshalled across ZMQ to wherever the Hardware Provider is running.
+1. **ProxyInstruments hide the network.** From the Protocol's point of view, calling an instrument looks like a local method call, but the call is actually marshalled across ZMQ to wherever the Hardware Provider is running.
 2. **Results stream back over WebSocket.** Long-running experiments emit progress updates as they go, so the GUI can render live counts and partial results rather than waiting for a single response at the end.
 
 ## 5. Walkthrough: a two-Node CHSH experiment
 
-The CHSH Bell test is the canonical multi-Node Experiment. Two Nodes — call them Alice and Bob — each measure one half of an entangled pair on independently chosen polarisation bases, and the Node API on the initiating side aggregates the results.
+The CHSH Bell test is the canonical multi-Node Experiment. Two Nodes (call them Alice and Bob) each measure one half of an entangled pair on independently chosen polarisation bases, and the Node API on the initiating side aggregates the results.
 
 ```{mermaid}
 sequenceDiagram
@@ -162,12 +173,12 @@ sequenceDiagram
 
 Key points:
 
-- The **GUI only talks to one Node API** (Alice's). The peer-Node coordination is entirely between Node APIs over HTTP — the GUI never connects to Bob.
+- The **GUI only talks to one Node API** (Alice's). The peer-Node coordination is entirely between Node APIs over HTTP. The GUI never connects to Bob.
 - Each Node drives its own instruments through its own Router and Hardware Providers; neither side touches the other side's hardware.
 - The initiating Node (Alice) is responsible for aggregating the joint statistics and computing the Bell inequality value.
 
 ## Where to go next
 
-- {doc}`../deployment/index` — how to actually stand up a Node and join a network.
-- {doc}`../pqn-node/index`, {doc}`../pqn-gui/index`, {doc}`../pqn-hardware/index` — package-specific internals.
-- {doc}`../physical-devices/index` — build guides for the physical instruments referenced throughout this page.
+- {doc}`../deployment/index`: how to actually stand up a Node and join a network.
+- {doc}`../pqn-node/index`, {doc}`../pqn-gui/index`, {doc}`../pqn-hardware/index`: package-specific internals.
+- {doc}`../physical-devices/index`: build guides for the physical instruments referenced throughout this page.

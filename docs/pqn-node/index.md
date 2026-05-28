@@ -1,6 +1,6 @@
 # pqn-node
 
-`pqn-node` is the FastAPI service that runs at each PQN site. It is the **Node API** — the only externally reachable component of a Node — and the orchestration brain for every Experiment. It depends on `pqn-hardware` as a git-pinned Python library for instrument access and Protocol logic.
+`pqn-node` is the FastAPI service that runs at each PQN site. It is the **Node API** (the only externally reachable component of a Node) and the orchestration brain for every Experiment. It depends on `pqn-hardware` as a git-pinned Python library for instrument access and Protocol logic.
 
 **Repository:** [github.com/PublicQuantumNetwork/pqn-node](https://github.com/PublicQuantumNetwork/pqn-node)
 

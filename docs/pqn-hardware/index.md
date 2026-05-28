@@ -6,11 +6,11 @@
 
 What lives in here:
 
-- **Instrument base classes and ProxyInstrument plumbing** — the common abstractions over physical hardware
-- **Drivers** — concrete instruments: Thorlabs rotators, TimeTagger, polarimeter, QKD hardware, plus dummy drivers for software-only development
-- **Network layer** — Router (ZMQ broker) and Hardware Provider, plus the client side used by `pqn-node`
-- **Protocols** — quantum-measurement logic for CHSH, QKD, Tomography, Visibility
-- **`pqn-hw` CLI** — `start-router`, `start-provider`
+- **Instrument base classes and ProxyInstrument plumbing**: the common abstractions over physical hardware.
+- **Drivers**: concrete instruments such as Thorlabs rotators, TimeTagger, polarimeter, and QKD hardware, plus dummy drivers for software-only development.
+- **Network layer**: Router (ZMQ broker) and Hardware Provider, plus the client side used by `pqn-node`.
+- **Protocols**: quantum-measurement logic for CHSH, QKD, Tomography, Visibility.
+- **`pqn-hw` CLI**: `start-router`, `start-provider`.
 
 `pqn-hardware` was split out from `pqn-node` (originally `pqn-stack`) so hardware-driver work and Node-service work can evolve independently. `pqn-node` pins it as a git dependency.
 

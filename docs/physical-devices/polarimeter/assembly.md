@@ -34,7 +34,7 @@ Apply gentle force to press the post into the base until it friction-fits secure
 :align: center
 ```
 
-Cut the film to a 1-inch diameter. Slide it into the slot on the mount — the crack is sized to accept the film snugly.
+Cut the film to a 1-inch diameter. Slide it into the slot on the mount. The crack is sized to accept the film snugly.
 
 > **Note:** Characterize the optics to the desired polarization basis before mounting.
 

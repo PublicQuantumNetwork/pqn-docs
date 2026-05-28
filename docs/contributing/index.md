@@ -40,7 +40,7 @@ Open `docs/build/html/index.html` in your browser to preview the result.
 
 ### Writing Style
 
-- Use plain, accessible language — remember that many readers are members of the general public interacting with quantum experiments for the first time
+- Use plain, accessible language. Many readers are members of the general public interacting with quantum experiments for the first time.
 - Keep technical jargon to a minimum or define it when first used
 - Use tables for configuration references and command comparisons
 
