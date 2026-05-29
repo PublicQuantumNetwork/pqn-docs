@@ -6,4 +6,5 @@ dependencies = [
     "sphinx",
     "pydata-sphinx-theme",
     "myst-parser",
+    "sphinxcontrib-mermaid",
 ]

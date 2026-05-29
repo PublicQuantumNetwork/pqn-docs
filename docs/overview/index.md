@@ -1,40 +1,32 @@
 # Overview
 
+```{toctree}
+:hidden:
+
+software-map
+```
+
 ## What is the PQN?
 
-The Public Quantum Network (PQN) is a distributed quantum network system that enables the general public to interact with real quantum hardware through a lightweight web interface. Visitors can run quantum experiments — including entanglement verification, quantum key distribution, and quantum random number generation — without any prior knowledge of quantum mechanics.
+The Public Quantum Network (PQN) lets the general public run real quantum experiments from a web browser. A visitor with no background in quantum mechanics can walk up to a PQN station, click through an experiment, and watch real photons being measured in real time.
 
-The network is built around a **node-based architecture**: each PQN node consists of a backend software stack (`pqn-stack`) managing hardware and protocols, and a frontend web interface (`pqn-gui`) for public interaction.
+A PQN site (a Node) bundles three things: a backend service that runs the experiments, a web interface that presents them as a series of interactive games, and a library that drives the physical hardware. The web interface is how the public actually meets the PQN. Each game is a guided walkthrough that wraps a quantum experiment, with the experiment itself acting as the game's backend.
 
-## Supported Experiments
+Two Nodes can also talk to each other so they can run experiments that need both sides, such as the CHSH Bell test. The classical communication between Nodes runs over a VPN that connects all the participating sites, and the quantum communication runs through an optical fibre between the two labs. Nothing in the PQN is exposed to the public internet.
 
-| Experiment | Description |
-|---|---|
-| **CHSH Bell Test** | Verifies quantum entanglement by testing Bell inequalities between two nodes |
-| **Quantum Key Distribution (QKD)** | Generates a shared secret key between two parties using quantum mechanics |
-| **Quantum Fortune** | Generates random numbers using quantum randomness |
-| **Secret Message Sharing (SSM)** | Sends a secret message encoded with quantum-generated keys |
-| **Tomography** | Characterizes quantum states via state tomography |
-| **Visibility** | Measures the visibility of quantum interference fringes |
+## How the software fits together
 
-## Architecture
+The PQN is built from three packages:
 
-The PQN uses a two-repo architecture:
+- **`pqn-node`**: the backend service that runs at each Node. Handles requests from the web interface and from peer Nodes, and orchestrates each experiment.
+- **`pqn-gui`**: the web interface. A Next.js app whose pages are organised as games, each one wrapping a quantum experiment.
+- **`pqn-hardware`**: the library that drives the physical devices, routes messages between processes, and runs the quantum protocols. The polarimeters, time taggers, rotators, and lasers it controls are part of this layer.
 
-- **[pqn-stack](https://github.com/PublicQuantumNetwork/pqn-stack)**: Python backend that manages quantum hardware, protocols, and node-to-node communication via a FastAPI server.
-- **[pqn-gui](https://github.com/PublicQuantumNetwork/pqn-gui)**: Next.js frontend providing the public-facing web interface.
+For diagrams of how these fit together, see the {doc}`software-map`.
 
-See the {doc}`../backend/architecture` and {doc}`../frontend/architecture` pages for details.
+## Hardware
 
-## Hardware Requirements
-
-Running the full PQN stack currently requires physical quantum hardware components:
-
-- **TimeTagger**: Photon detection timing device
-- **Rotators / Rotary Encoders**: Polarization basis rotation control (e.g., half-wave plates)
-- **Polarimeter**: Photon polarization measurement
-
-Dummy instrument drivers are available for software-only testing, but full experiment functionality requires real hardware.
+A PQN Node currently runs on real quantum-optics hardware. Detailed requirements and setup notes are still being written, we will get back to them. For the parts that are already documented, see {doc}`../physical-devices/index`.
 
 ## Acknowledgements
 
