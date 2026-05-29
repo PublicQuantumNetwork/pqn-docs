@@ -5,7 +5,7 @@ author = 'Public Quantum Network Team'
 extensions = ['myst_parser', 'sphinxcontrib.mermaid']
 
 templates_path = ['_templates']
-exclude_patterns = ['build']
+exclude_patterns = ['build', 'adr']
 
 language = "en"
 

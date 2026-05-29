@@ -7,7 +7,7 @@ This file is the canonical glossary for terms used across `pqn-docs`, `pqn-node`
 ## Language
 
 **Node**:
-A PQN deployment at a single physical site. Comprises a Node API, a Router, one or more Hardware Providers, instrument drivers, and the physical instruments themselves. The GUI is _not_ part of a Node.
+A PQN deployment at a single physical site. Comprises a Node API, a Router, one or more Instrument Providers, instrument drivers, and the physical instruments themselves. The GUI is _not_ part of a Node.
 _Avoid_: site, instance, station
 
 **Node API**:
@@ -17,22 +17,26 @@ _Avoid_: backend, server
 **Router**:
 ZMQ message broker inside a Node. Routes messages between the Node API, Hardware Providers, and developer clients.
 
-**Hardware Provider**:
-Process inside a Node that hosts physical instruments and exposes them to the rest of the Node via ProxyInstruments.
-_Avoid_: Instrument Provider (older name; still appears in some code paths)
+**Instrument Provider** / `InstrumentProvider`:
+Process inside a Node that hosts physical instruments and exposes them to the rest of the Node via ProxyInstruments. The class is `InstrumentProvider` (`pqn_hardware.network.instrument_provider`).
+_Avoid_: Hardware Provider (appears in some prose, but no such name exists in the code)
 
 **ProxyInstrument**:
-Client-side handle for an instrument hosted by a Hardware Provider. Lets the Node API call the instrument without knowing where it physically runs.
+Client-side handle for an instrument hosted by an Instrument Provider. Lets the Node API call the instrument without knowing where it physically runs.
 
 **Instrument**:
 Software abstraction for one piece of physical hardware (TimeTagger, Polarimeter, Rotator, etc.). Concrete implementations are called drivers and live in `pqn-hardware`.
 _Avoid_: device (reserved for the physical thing)
 
 **Driver**:
-A concrete Instrument implementation for a specific piece of hardware (e.g. Thorlabs rotator driver).
+A concrete Instrument implementation for a specific piece of hardware (e.g. Thorlabs rotator driver). One Instrument type can have many Drivers (e.g. `RotatorInstrument` → `APTRotator` / `SerialRotator` / `EllxRotator`).
+
+**Physical Device**:
+The physical apparatus a Driver controls — the actual hardware on the bench. In prose, refer to it as "the device" or "the hardware"; reserve **Instrument** for the software abstraction. Driver docstrings and logs already use "device" this way.
+_Avoid_: instrument (reserved for the software abstraction)
 
 **Protocol**:
-The quantum-measurement logic for a single experiment type (CHSH, QKD, Tomography, Visibility). Lives in `pqn-hardware`. Distinct from Experiment.
+The quantum-measurement logic for a single experiment type (CHSH, QKD, Tomography, Visibility). A **Node-level** concept that lives in `pqn-node`, *not* in `pqn-hardware` (see `docs/adr/0001-pqn-hardware-node-split.md`). Distinct from Experiment.
 
 **Experiment**:
 A user-facing activity in the GUI (CHSH Bell Test, Quantum Fortune, QKD, SSM, Tomography, Visibility). Implemented on top of one or more Protocols.
@@ -50,8 +54,8 @@ An institution-run instance of the PQN. An organisation that stands up its own N
 ## Relationships
 
 - A **PQN Network** is composed of one or more **Nodes**.
-- A **Node** contains one **Node API**, one **Router**, and one or more **Hardware Providers**.
-- A **Hardware Provider** hosts one or more **Instruments**; each Instrument is implemented by a **Driver**.
+- A **Node** contains one **Node API**, one **Router**, and one or more **Instrument Providers**.
+- An **Instrument Provider** hosts one or more **Instruments**; each Instrument is implemented by a **Driver**.
 - The **Node API** reaches Instruments via **ProxyInstruments** routed through the **Router**.
 - An **Experiment** in the **GUI** invokes one or more **Protocols** on the **Node API**.
 - A **Protocol** orchestrates Instruments to perform a single quantum measurement task.
@@ -59,7 +63,7 @@ An institution-run instance of the PQN. An organisation that stands up its own N
 ## Example dialogue
 
 > **New contributor:** "When the user clicks 'Run CHSH' in the GUI, what happens?"
-> **Maintainer:** "The **GUI** calls the **Node API**. The Node API kicks off the CHSH **Protocol**, which talks to the local **Hardware Provider** through **ProxyInstruments** to drive the **Instruments** (rotators, the TimeTagger, etc.) For two-**Node** CHSH the Node API also coordinates with the peer **Node**'s Node API."
+> **Maintainer:** "The **GUI** calls the **Node API**. The Node API kicks off the CHSH **Protocol**, which talks to the local **Instrument Provider** through **ProxyInstruments** to drive the **Instruments** (rotators, the TimeTagger, etc.) For two-**Node** CHSH the Node API also coordinates with the peer **Node**'s Node API."
 >
 > **New contributor:** "And the GUI is part of the Node?"
 > **Maintainer:** "No, the GUI is just a client. The **Node** is the backend stack at one site. You can run every **Experiment** without the GUI."
@@ -70,5 +74,6 @@ An institution-run instance of the PQN. An organisation that stands up its own N
   - At the **network** zoom level, "Node" means the whole site-level deployment.
   - When working **inside** a Node, "Node" is sometimes used as shorthand for the **Node API** (the brain of the Node).
   Resolution: prefer **"Node API"** in writing whenever you mean the FastAPI service. Reserve unqualified "Node" for the site-level meaning.
-- **"Hardware"** has two unrelated meanings: the Python library `pqn-hardware` (drivers + Router + Provider + Protocols) and the physical devices themselves. In docs prose, write `pqn-hardware` (in code font) for the package and **Physical Device** / **Instrument** for the physical thing.
-- **"Instrument Provider"** vs **"Hardware Provider"**: same concept, two names in code. Prefer **Hardware Provider** in docs.
+- **"Hardware"** has two unrelated meanings: the Python library `pqn-hardware` (drivers + Router + Instrument Provider + client) and the physical devices themselves. In docs prose, write `pqn-hardware` (in code font) for the package and **Physical Device** / **Instrument** for the physical thing.
+- **"Instrument Provider"** vs **"Hardware Provider"**: same concept. The code uses `InstrumentProvider` everywhere; "Hardware Provider" exists only in older prose. Prefer **Instrument Provider** in docs.
+- **"device" in the client API**: the client-side method and message names say "device" for a *hosted Instrument* — `get_device`, `get_available_devices`, `GET_DEVICE_STRUCTURE`, `device_name`. This is a historical naming quirk; the thing returned is a **ProxyInstrument** (an Instrument), not a Physical Device. In prose always write **Instrument**, and note the method names say "device" for historical reasons.

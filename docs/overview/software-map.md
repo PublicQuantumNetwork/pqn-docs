@@ -3,7 +3,7 @@
 This page is the top-level mental map of the Public Quantum Network: how the whole system fits together, how a single Node is structured, where each package lives, and how a real request flows through everything.
 
 ```{note}
-For a glossary of the terms used here (Node, Node API, Hardware Provider, ProxyInstrument, Protocol, Experiment, GUI), see `CONTEXT.md` at the repository root.
+For a glossary of the terms used here (Node, Node API, Instrument Provider, ProxyInstrument, Protocol, Experiment, GUI), see `CONTEXT.md` at the repository root.
 
 Deeper, package-specific details live under {doc}`../pqn-node/index`, {doc}`../pqn-gui/index`, and {doc}`../pqn-hardware/index`. Operator-focused setup lives under {doc}`../deployment/index`.
 ```
@@ -36,7 +36,7 @@ flowchart LR
     classDef client fill:#fff3e0,stroke:#b36b1f;
 ```
 
-Inside a Node, the Node API is the only component that ever talks to anything outside the Node. Everything else (Router, Hardware Providers, drivers, instruments) lives on the Node's local network and is reachable only through the Node API. Nothing in the PQN is exposed to the public internet.
+Inside a Node, the Node API is the only component that ever talks to anything outside the Node. Everything else (Router, Instrument Providers, drivers, instruments) lives on the Node's local network and is reachable only through the Node API. Nothing in the PQN is exposed to the public internet.
 
 ## 2. A single Node
 
@@ -50,8 +50,8 @@ flowchart TB
     subgraph Node["Node (site intranet)"]
         API[Node API<br/><i>pqn-node</i>]
         Router[Router<br/><i>pqn-hardware</i>]
-        Provider1[Hardware Provider<br/><i>pqn-hardware</i>]
-        Provider2[Hardware Provider<br/><i>pqn-hardware</i>]
+        Provider1[Instrument Provider<br/><i>pqn-hardware</i>]
+        Provider2[Instrument Provider<br/><i>pqn-hardware</i>]
         Driver1[Driver]
         Driver2[Driver]
         Driver3[Driver]
@@ -77,10 +77,10 @@ flowchart TB
 
 - **Node API** (in `pqn-node`): FastAPI service. The only component reachable from outside. Handles GUI requests and peer-Node coordination. Owns the orchestration logic for each Experiment.
 - **Router** (in `pqn-hardware`): ZMQ message broker. All in-Node messaging passes through it.
-- **Hardware Provider** (in `pqn-hardware`): process that hosts physical instruments. A Node can run more than one Provider; for example, one machine per optics table or per piece of expensive hardware.
+- **Instrument Provider** (in `pqn-hardware`): process that hosts physical instruments. A Node can run more than one Provider; for example, one machine per optics table or per piece of expensive hardware.
 - **Driver** (in `pqn-hardware`): concrete instrument implementation. Talks to one piece of physical hardware (Thorlabs rotator, TimeTagger, etc.).
 
-The Node API never talks to a Driver directly. It calls a **ProxyInstrument**, a client-side handle whose method calls are serialised onto the Router and dispatched to whichever Hardware Provider hosts the real instrument. This means the Node API code does not need to know which machine an instrument is plugged into.
+The Node API never talks to a Driver directly. It calls a **ProxyInstrument**, a client-side handle whose method calls are serialised onto the Router and dispatched to whichever Instrument Provider hosts the real instrument. This means the Node API code does not need to know which machine an instrument is plugged into.
 
 ## 3. The three packages
 
@@ -90,12 +90,12 @@ The same picture, redrawn around the package boundary instead of the runtime top
 flowchart LR
     GUI["pqn-gui<br/><sub>Next.js · TypeScript</sub><br/>public web UI"]:::ts
     Node["pqn-node<br/><sub>FastAPI · Python</sub><br/>Node API service"]:::py
-    HW["pqn-hardware<br/><sub>library · Python</sub><br/>drivers, Router, Provider, Protocols"]:::py
+    HW["pqn-hardware<br/><sub>library · Python</sub><br/>drivers, Router, Provider"]:::py
 
     GUI -- HTTP / WebSocket --> Node
     Node -- imports --> HW
     Node -- launches --> RouterProc["Router process<br/><i>pqn-hw start-router</i>"]
-    Node -- launches --> ProviderProc["Hardware Provider process<br/><i>pqn-hw start-provider</i>"]
+    Node -- launches --> ProviderProc["Instrument Provider process<br/><i>pqn-hw start-provider</i>"]
     RouterProc -. provided by .- HW
     ProviderProc -. provided by .- HW
 
@@ -103,9 +103,9 @@ flowchart LR
     classDef ts fill:#fff3e0,stroke:#b36b1f;
 ```
 
-- **`pqn-node`** is the only package that actually runs the Node API service. It depends on `pqn-hardware` as a git-pinned library and orchestrates everything: HTTP routing, peer-Node coordination, Experiment lifecycle, WebSocket streaming.
+- **`pqn-node`** is the only package that actually runs the Node API service. It depends on `pqn-hardware` as a git-pinned library and orchestrates everything: HTTP routing, peer-Node coordination, Protocol logic, Experiment lifecycle, WebSocket streaming.
 - **`pqn-gui`** is a Next.js application. It has no Python; it knows the Node API only through its HTTP/WebSocket surface.
-- **`pqn-hardware`** is a Python library *and* a CLI (`pqn-hw`). The library is consumed in-process by `pqn-node` for ProxyInstrument calls and Protocol logic. The CLI runs the Router and Hardware Provider as separate long-lived processes, started during deployment.
+- **`pqn-hardware`** is a Python library *and* a CLI (`pqn-hw`). The library is consumed in-process by `pqn-node` for ProxyInstrument calls. The CLI runs the Router and Instrument Provider as separate long-lived processes, started during deployment.
 
 The split between `pqn-node` and `pqn-hardware` exists so that hardware-driver work (which moves at the pace of new instruments and ZMQ infrastructure changes) can evolve independently of the FastAPI service (which moves at the pace of new Experiments and UI features).
 
@@ -118,9 +118,9 @@ sequenceDiagram
     actor User
     participant GUI as GUI<br/>(pqn-gui)
     participant API as Node API<br/>(pqn-node)
-    participant Proto as Protocol<br/>(pqn-hardware)
+    participant Proto as Protocol<br/>(pqn-node)
     participant Router as Router<br/>(pqn-hardware)
-    participant Provider as Hardware Provider<br/>(pqn-hardware)
+    participant Provider as Instrument Provider<br/>(pqn-hardware)
     participant Instr as Physical Instrument
 
     User->>GUI: click "Run"
@@ -174,7 +174,7 @@ sequenceDiagram
 Key points:
 
 - The **GUI only talks to one Node API** (Alice's). The peer-Node coordination is entirely between Node APIs over HTTP. The GUI never connects to Bob.
-- Each Node drives its own instruments through its own Router and Hardware Providers; neither side touches the other side's hardware.
+- Each Node drives its own instruments through its own Router and Instrument Providers; neither side touches the other side's hardware.
 - The initiating Node (Alice) is responsible for aggregating the joint statistics and computing the Bell inequality value.
 
 ## Where to go next
