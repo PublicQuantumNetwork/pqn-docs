@@ -15,7 +15,7 @@ The FastAPI service inside a Node. The only Node component reachable from outsid
 _Avoid_: backend, server
 
 **Router**:
-ZMQ message broker inside a Node. Routes messages between the Node API, Hardware Providers, and developer clients.
+ZMQ message broker inside a Node. Routes messages between the Node API, Instrument Providers, and developer clients.
 
 **Instrument Provider** / `InstrumentProvider`:
 Process inside a Node that hosts physical instruments and exposes them to the rest of the Node via ProxyInstruments. The class is `InstrumentProvider` (`pqn_hardware.network.instrument_provider`).
