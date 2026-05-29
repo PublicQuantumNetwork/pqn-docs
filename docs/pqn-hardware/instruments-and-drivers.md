@@ -40,7 +40,7 @@ a new one.
 
 The contract itself is small, so it's worth building up a piece at a time.
 
-At its core, an Instrument is an identity plus two collections of capabilities:
+At its core, an Instrument is an identity plus two groups of capabilities:
 
 ```python
 @runtime_checkable
@@ -58,7 +58,7 @@ The identity fields are straightforward: a `name` the instrument is addressed by
 human-readable `desc`, and an `hw_address` (a serial port, a USB id, whatever the
 hardware is reached through).
 
-The two capability collections are the heart of the model:
+These two groups are the heart of the model:
 
 - **`parameters`** is a set of attribute *names* — values you **read and write**. A
   rotator's `degrees`, a dummy's `param_int`: state you query or set.
@@ -67,11 +67,11 @@ The two capability collections are the heart of the model:
 
 This split — values you get/set versus actions you call — is what makes an instrument
 addressable from a distance. When code drives a remote instrument, the proxy uses these
-two collections to decide whether an attribute access should read or write a value or
+two groups to decide whether an attribute access should read or write a value or
 call a method (see *Using a ProxyInstrument* below, and the wire format on
 {doc}`network`).
 
-Because the two collections are keyed by name, there's one rule on names:
+Because both groups are keyed by name, there's one rule on names:
 
 ```{note}
 An instrument's `name` may not contain a `:` character. The `:` separates the parts of
@@ -177,7 +177,214 @@ below.
 
 ## Writing a Driver
 
-> _Placeholder — drafted in sub-phase 3.2 (grill pending)._
+Writing a Driver means giving real behaviour to the lifecycle, parameters, operations,
+and `info` from the previous section, for one specific piece of hardware. The clearest
+way to see how is to build one up from scratch — and the repository already ships the
+perfect specimen for that: `DummyInstrument`, a fake instrument with no hardware behind
+it, used in tests and as a worked example. We'll assemble it piece by piece, then look at
+how a real Driver differs.
+
+### Assembling a Driver, step by step
+
+A Driver is a `dataclass` that subclasses `Instrument`. Start with the class itself and
+the state it keeps:
+
+```python
+@dataclass(slots=True)
+class DummyInstrument(Instrument):
+    _param_int: int = 2
+    _param_str: str = "hello"
+    _param_bool: bool = True
+    connected: bool = False
+```
+*Source: [`dummies.py:17-22`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L17-L22)*
+
+The fields prefixed with `_` are the dummy's private state — the values a real Driver
+would read off the hardware. (`name`, `desc`, and `hw_address` come from `Instrument`
+itself, so they don't need repeating here.)
+
+Next, declare what the instrument can do. Recall that an Instrument advertises its
+capabilities in two places, `parameters` and `operations`; a Driver fills those in
+inside `__post_init__`:
+
+```python
+    def __post_init__(self) -> None:
+        self.parameters = {"param_int", "param_str", "param_bool"}
+        self.operations = {
+            "double_int": self.double_int,
+            "lowercase_str": self.lowercase_str,
+            "uppercase_str": self.uppercase_str,
+            "toggle_bool": self.toggle_bool,
+            "set_half_input_int": self.set_half_input_int,
+        }
+```
+*Source: [`dummies.py:24-32`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L24-L32)*
+
+`parameters` is just the set of attribute names a caller may read and write;
+`operations` maps each callable name to the bound method that implements it. Everything a
+caller is allowed to do remotely has to be registered in one of these two.
+
+Now the lifecycle. The dummy has nothing to connect to, so `start` and `close` only flip
+a flag — but this is exactly where a real Driver would open its serial port and release
+it again:
+
+```python
+    def start(self) -> None:
+        self.connected = True
+
+    def close(self) -> None:
+        self.connected = False
+```
+*Source: [`dummies.py:45-49`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L45-L49)*
+
+A parameter is implemented as an ordinary property pair — a getter and a setter over the
+private field:
+
+```python
+    @property
+    @log_parameter
+    def param_int(self) -> int:
+        return self._param_int
+
+    @param_int.setter
+    @log_parameter
+    def param_int(self, value: int) -> None:
+        self._param_int = value
+```
+*Source: [`dummies.py:51-59`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L51-L59)*
+
+The `@log_parameter` and `@log_operation` decorators that appear here and below are
+optional helpers from `instrument.py`: wrap a parameter accessor or an operation and
+every read, write, and call is logged with timing. They aren't required for a working
+Driver, but they're cheap observability, so the real drivers use them throughout.
+
+An operation is just a method, registered in `operations` above:
+
+```python
+    @log_operation
+    def double_int(self) -> int:
+        self._param_int *= 2
+        return self._param_int
+```
+*Source: [`dummies.py:81-84`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L81-L84)*
+
+Finally, `info`. As described earlier, a Driver returns its *own* info class carrying its
+complete state — for the dummy that's `DummyInfo`, which extends `InstrumentInfo` with
+the three parameter values:
+
+```python
+@dataclass(frozen=True, slots=True)
+class DummyInfo(InstrumentInfo):
+    param_int: int = 0
+    param_str: str = ""
+    param_bool: bool = False
+```
+*Source: [`dummies.py:10-14`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L10-L14)*
+
+```python
+    @property
+    def info(self) -> DummyInfo:
+        return DummyInfo(
+            name=self.name,
+            desc=self.desc,
+            hw_address=self.hw_address,
+            param_int=self.param_int,
+            param_str=self.param_str,
+            param_bool=self.param_bool,
+        )
+```
+*Source: [`dummies.py:34-43`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L34-L43)*
+
+That's a complete Driver: state, capabilities, lifecycle, accessors, and a snapshot.
+Swap the flag-flipping for real serial I/O and you have the shape of every real Driver in
+the package.
+
+### Building on an Instrument category
+
+Subclassing the base `Instrument` means wiring up everything by hand, as the dummy does.
+When your hardware fits one of the Instrument categories, you *can* subclass that instead
+and let it do some of the wiring for you. `RotatorInstrument`, for example, already
+registers the standard rotator operations and parameter in its own `__post_init__`:
+
+```python
+    def __post_init__(self) -> None:
+        self.operations["move_to"] = self.move_to
+        self.operations["move_by"] = self.move_by
+        self.parameters.add("degrees")
+```
+*Source: [`instrument.py:180-184`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L180-L184)*
+
+It even implements `move_to` and `move_by` for you, in terms of `degrees`:
+
+```python
+    def move_to(self, angle: float) -> None:
+        self.degrees = angle
+
+    def move_by(self, angle: float) -> None:
+        self.degrees += angle
+```
+*Source: [`instrument.py:194-200`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L194-L200)*
+
+So a rotator Driver built on `RotatorInstrument` only has to supply the parts that are
+genuinely hardware-specific: how to `start` and `close` the connection, how to read and
+write `degrees`, and its `info`. `SerialRotator` is about as small as a real Driver gets:
+
+```python
+@dataclass(slots=True)
+class SerialRotator(RotatorInstrument):
+    _degrees: float = 0.0  # The hardware doesn't support position tracking
+    _conn: serial.Serial = field(init=False, repr=False)
+
+    def start(self) -> None:
+        self._conn = serial.Serial(self.hw_address, baudrate=115200, timeout=1)
+        self._conn.write(b"open_channel")
+        self._conn.read(100)
+        self._conn.write(b"motor_ready")
+        self._conn.read(100)
+        self.degrees = self.offset_degrees
+
+    def close(self) -> None:
+        self.degrees = 0
+        self._conn.close()
+
+    @property
+    def degrees(self) -> float:
+        return self._degrees
+
+    @degrees.setter
+    def degrees(self, degrees: float) -> None:
+        self._conn.write(f"SRA {degrees}".encode())
+        self._degrees = degrees
+        _ = self._conn.readline().decode()
+```
+*Source: [`rotator.py:95-132`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L95-L132)*
+
+It never defines `move_to`, `move_by`, or `__post_init__` — all three come from
+`RotatorInstrument`. Notice the payoff of the lifecycle rule from earlier: opening the
+serial port lives entirely in `start()`, so constructing a `SerialRotator` from config
+touches no hardware.
+
+```{note}
+Because construction does no I/O, an operation could be called before `start()` has run.
+If that would misbehave on your hardware, guard against it: `APTRotator` raises
+`DeviceNotStartedError` if you try to move it before its device handle exists
+([`rotator.py:67`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L67)).
+```
+
+### The drivers that ship today
+
+The package ships these Drivers, grouped by the Instrument category each one implements:
+
+| Category | Drivers | Hardware |
+|---|---|---|
+| `TimeTaggerInstrument` | [`SwabianTimeTagger`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/timetagger.py#L19) | Swabian Instruments time tagger |
+| `RotatorInstrument` | [`APTRotator`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L24), [`SerialRotator`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L96), [`EllxRotator`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L136) | Thorlabs APT mounts; a plain serial rotator; Thorlabs ELLx mounts |
+| `PolarimeterInstrument` | [`ArduinoPolarimeter`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/polarimeter.py#L95) | Arduino-based polarimeter |
+| `Instrument` (base) | [`DummyInstrument`](https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L18) | none — test and example fixture |
+
+The rotator row is the point made back in the orientation: one category, several Drivers.
+A `RotatorInstrument` is a rotator whatever protocol it speaks, and the rest of the
+system drives all three through the identical `degrees` / `move_to` / `move_by` interface.
 
 ## Using a ProxyInstrument
 
