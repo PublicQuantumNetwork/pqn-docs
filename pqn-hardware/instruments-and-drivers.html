@@ -1,0 +1,1506 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Instruments &amp; drivers &#8212; Public Quantum Network  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pqn-hardware/instruments-and-drivers';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://publicquantumnetwork.github.io/pqn-docs/pqn-hardware/instruments-and-drivers.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Network transport: Router, Instrument Provider, Client" href="network.html" />
+    <link rel="prev" title="pqn-hardware" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Public Quantum Network</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview/index.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../deployment/index.html">
+    Deployment
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pqn-node/index.html">
+    pqn-node
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pqn-gui/index.html">
+    pqn-gui
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    pqn-hardware
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../physical-devices/index.html">
+    Physical Devices
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributing/index.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://github.com/PublicQuantumNetwork/pqn-node">
+    pqn-node
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://github.com/PublicQuantumNetwork/pqn-gui">
+    pqn-gui
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://github.com/PublicQuantumNetwork/pqn-hardware">
+    pqn-hardware
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/PublicQuantumNetwork" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview/index.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../deployment/index.html">
+    Deployment
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pqn-node/index.html">
+    pqn-node
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pqn-gui/index.html">
+    pqn-gui
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    pqn-hardware
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../physical-devices/index.html">
+    Physical Devices
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing/index.html">
+    Contributing
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/PublicQuantumNetwork/pqn-node">
+    pqn-node
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/PublicQuantumNetwork/pqn-gui">
+    pqn-gui
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/PublicQuantumNetwork/pqn-hardware">
+    pqn-hardware
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/PublicQuantumNetwork" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Instruments &amp; drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">Network transport: Router, Instrument Provider, Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">The <code class="docutils literal notranslate"><span class="pre">pqn-hw</span></code> CLI</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">pqn-hardware</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Instruments &amp; drivers</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="instruments-drivers">
+<h1>Instruments &amp; drivers<a class="headerlink" href="#instruments-drivers" title="Link to this heading">#</a></h1>
+<p>A Node is surrounded by real equipment (rotators, time taggers, polarimeters), and
+something has to turn “rotate this waveplate to 22.5°” into the actual bytes that make
+the motor move. That’s the job of this part of <code class="docutils literal notranslate"><span class="pre">pqn-hardware</span></code>: it gives every piece of
+hardware a uniform shape in software, so the rest of the system can drive it without
+knowing the messy details of any particular device.</p>
+<p>Two ideas sit at the centre of that, and it helps to keep them apart from the start.</p>
+<p>The first is the <strong>Instrument</strong>, the <em>software abstraction</em> for a piece of hardware.
+It’s a small contract that says what any instrument looks like: it has a name, it can be
+started and closed, and it exposes some values you can read or write and some actions
+you can call. The rest of the system only ever talks to this abstraction.</p>
+<p>The second is the <strong>Driver</strong>, a <em>concrete implementation</em> of that contract for one
+specific piece of hardware, like a Thorlabs rotator or a Swabian time tagger. The same
+kind of instrument can have several Drivers: a rotator is still a rotator whether it
+speaks the Thorlabs APT protocol, a plain serial protocol, or the ELLx protocol, so all
+three are Drivers behind the one rotator Instrument.</p>
+<p>So you <em>write</em> Drivers, and you <em>program against</em> Instruments. And when a piece of
+hardware lives on another machine, you still program against an Instrument, a
+<code class="docutils literal notranslate"><span class="pre">ProxyInstrument</span></code> that quietly forwards your calls across the Node. The rest of this
+page works through each of those in turn: the Instrument model first, then writing a
+Driver, then using one from afar through a <code class="docutils literal notranslate"><span class="pre">ProxyInstrument</span></code>.</p>
+<section id="the-instrument-model">
+<h2>The Instrument model<a class="headerlink" href="#the-instrument-model" title="Link to this heading">#</a></h2>
+<p>Every instrument in <code class="docutils literal notranslate"><span class="pre">pqn-hardware</span></code>, real or simulated, is built on a single base type
+called <code class="docutils literal notranslate"><span class="pre">Instrument</span></code>, defined in
+<a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py"><code class="docutils literal notranslate"><span class="pre">src/pqn_hardware/instrument.py</span></code></a>.
+It’s written as a
+<code class="docutils literal notranslate"><span class="pre">typing.Protocol</span></code> (Python’s way of describing a <em>shape</em> that other classes are expected
+to match), but it’s also a <code class="docutils literal notranslate"><span class="pre">dataclass</span></code>, so a Driver doesn’t just match it from a
+distance: it subclasses <code class="docutils literal notranslate"><span class="pre">Instrument</span></code> directly and fills in the pieces. In other words,
+<code class="docutils literal notranslate"><span class="pre">Instrument</span></code> does double duty. It’s the contract that describes what every instrument
+exposes to the rest of the system, and it’s the base class you start from when you write
+a new one.</p>
+<p>The contract itself is small, so it’s worth building up a piece at a time.</p>
+<p>At its core, an Instrument is an identity plus two groups of capabilities:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@runtime_checkable</span>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Instrument</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">hw_address</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">operations</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L26-L42"><code class="docutils literal notranslate"><span class="pre">instrument.py:26-42</span></code></a></em></p>
+<p>The identity fields are straightforward: a <code class="docutils literal notranslate"><span class="pre">name</span></code> the instrument is addressed by, a
+human-readable <code class="docutils literal notranslate"><span class="pre">desc</span></code>, and an <code class="docutils literal notranslate"><span class="pre">hw_address</span></code> (a serial port, a USB id, whatever the
+hardware is reached through).</p>
+<p>These two groups are the heart of the model:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">parameters</span></code></strong> is a set of attribute <em>names</em>: values you <strong>read and write</strong>. A
+rotator’s <code class="docutils literal notranslate"><span class="pre">degrees</span></code>, a dummy’s <code class="docutils literal notranslate"><span class="pre">param_int</span></code>: state you query or set.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">operations</span></code></strong> is a dict mapping <em>names</em> to callables: <em>actions</em> you <strong>invoke</strong>. A
+rotator’s <code class="docutils literal notranslate"><span class="pre">move_to</span></code>, a time tagger’s <code class="docutils literal notranslate"><span class="pre">count_singles</span></code>: things the instrument <em>does</em>.</p></li>
+</ul>
+<p>This split, values you get/set versus actions you call, is what makes an instrument
+addressable from a distance. When code drives a remote instrument, the proxy uses these
+two groups to decide whether an attribute access should read or write a value or
+call a method (see <em>Using a ProxyInstrument</em> below, and the wire format on
+<a class="reference internal" href="network.html"><span class="doc">Network transport: Router, Instrument Provider, Client</span></a>).</p>
+<p>Because both groups are keyed by name, there’s one rule on names:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An instrument’s <code class="docutils literal notranslate"><span class="pre">name</span></code> may not contain a <code class="docutils literal notranslate"><span class="pre">:</span></code> character. The <code class="docutils literal notranslate"><span class="pre">:</span></code> separates the parts of
+a request when talking to a remote instrument, so a colon in the name would be
+ambiguous (<a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L33"><code class="docutils literal notranslate"><span class="pre">instrument.py:33</span></code></a>).</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;runtime_checkable</span></code> decorator means an ordinary <code class="docutils literal notranslate"><span class="pre">isinstance(x,</span> <span class="pre">Instrument)</span></code> check
+works at runtime, so code can confirm something really is an instrument before driving
+it.</p>
+<section id="anatomy-of-a-driver">
+<h3>Anatomy of a Driver<a class="headerlink" href="#anatomy-of-a-driver" title="Link to this heading">#</a></h3>
+<section id="lifecycle">
+<h4>Lifecycle<a class="headerlink" href="#lifecycle" title="Link to this heading">#</a></h4>
+<p>An Instrument has a start/stop lifecycle:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L47-L48"><code class="docutils literal notranslate"><span class="pre">instrument.py:47-48</span></code></a></em></p>
+<p>These two look trivial, but they carry the whole relationship with the physical device,
+and it’s worth keeping them cleanly separated when you write a Driver.</p>
+<p>The rule: <strong>constructing the Instrument object should do nothing to the hardware; the
+device should only be touched once <code class="docutils literal notranslate"><span class="pre">start()</span></code> is called.</strong>
+Building the object should only record where the device lives (its <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">desc</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">hw_address</span></code>, plus any driver-specific settings) and set sensible defaults. It should
+not open a port, contact a controller, or move anything. Save all of that for <code class="docutils literal notranslate"><span class="pre">start()</span></code>:
+opening the serial or USB connection, handshaking with the controller, homing a motor to
+a known reference angle.</p>
+<p>The reason is in how Instruments come to life. An Instrument Provider builds each one
+straight from its config (<code class="docutils literal notranslate"><span class="pre">class_(name=...,</span> <span class="pre">desc=...,</span> <span class="pre">hw_address=...,</span> <span class="pre">**settings)</span></code>,
+purely from the strings in a TOML file) and only <em>then</em> calls <code class="docutils literal notranslate"><span class="pre">start()</span></code>
+(<a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/network/instrument_provider.py#L113"><code class="docutils literal notranslate"><span class="pre">instrument_provider.py:113</span></code></a>).
+At construction time it has no idea whether the device is plugged in, powered, or even
+reachable. If your constructor tried to open the port, a missing or busy device would
+make the object impossible to <em>create</em>, and you would lose the clean line between an
+instrument that is <em>configured</em> and one that is <em>connected</em>. Deferring every side effect
+to <code class="docutils literal notranslate"><span class="pre">start()</span></code> keeps construction cheap and predictable, so an instrument can be created
+freely and brought online deliberately.</p>
+<p><code class="docutils literal notranslate"><span class="pre">close()</span></code> is the other half of that bargain. Most of these devices hold an <em>exclusive</em>
+resource (a serial port, a USB handle) that nothing else can open while it’s in use.
+If a process walks away without calling <code class="docutils literal notranslate"><span class="pre">close()</span></code>, the port can stay locked until the
+hardware is power-cycled, and the device may be left in an undefined state. So a Driver
+does its real connect-and-initialise in <code class="docutils literal notranslate"><span class="pre">start()</span></code> and is responsible for releasing
+everything cleanly in <code class="docutils literal notranslate"><span class="pre">close()</span></code>.</p>
+</section>
+<section id="reporting-state-info">
+<h4>Reporting state: <code class="docutils literal notranslate"><span class="pre">info</span></code><a class="headerlink" href="#reporting-state-info" title="Link to this heading">#</a></h4>
+<p>An Instrument should be able to report its complete current state on demand, and that’s
+what <code class="docutils literal notranslate"><span class="pre">info</span></code> is for. It hands back a single read-only snapshot that captures everything
+worth knowing about the instrument, its identity and every piece of live state, so a
+caller can inspect it without having to read parameters one by one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">InstrumentInfo</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L50-L51"><code class="docutils literal notranslate"><span class="pre">instrument.py:50-51</span></code></a></em></p>
+<p>That snapshot is an <code class="docutils literal notranslate"><span class="pre">InstrumentInfo</span></code>. The base class only holds the fields every
+instrument has: its identity, plus a free-form <code class="docutils literal notranslate"><span class="pre">hw_status</span></code> for anything else worth
+reporting:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InstrumentInfo</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">hw_address</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">hw_status</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L18-L23"><code class="docutils literal notranslate"><span class="pre">instrument.py:18-23</span></code></a></em></p>
+<p>You won’t usually return a bare <code class="docutils literal notranslate"><span class="pre">InstrumentInfo</span></code>, though. When you write a Driver, you
+define your own info class that extends <code class="docutils literal notranslate"><span class="pre">InstrumentInfo</span></code> with the state specific to your
+device, and return <em>that</em> from <code class="docutils literal notranslate"><span class="pre">info</span></code>. The dummy driver’s <code class="docutils literal notranslate"><span class="pre">DummyInfo</span></code> adds its three
+parameter values; a rotator’s <code class="docutils literal notranslate"><span class="pre">RotatorInfo</span></code> adds the current angle and offset. A caller
+then gets back the full, typed state of whatever instrument it happens to be holding.</p>
+</section>
+<section id="instrument-categories">
+<h4>Instrument categories<a class="headerlink" href="#instrument-categories" title="Link to this heading">#</a></h4>
+<p>The base <code class="docutils literal notranslate"><span class="pre">Instrument</span></code> describes any instrument at all. On top of it, the library defines
+a more specific Instrument for each broad category of hardware:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">TimeTaggerInstrument</span></code></strong></p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">RotatorInstrument</span></code></strong></p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">PolarimeterInstrument</span></code></strong></p></li>
+</ul>
+<p>Each of these builds on <code class="docutils literal notranslate"><span class="pre">Instrument</span></code> (it still <em>is</em> an Instrument) and pins down a
+<strong>standard interface</strong> for its category: the exact parameters and operations every
+rotator, time tagger, or polarimeter is expected to expose. That shared interface is the
+whole point. Because every rotator presents the same <code class="docutils literal notranslate"><span class="pre">degrees</span></code>, <code class="docutils literal notranslate"><span class="pre">move_to</span></code>, and <code class="docutils literal notranslate"><span class="pre">move_by</span></code>,
+the rest of the system can be written against “a rotator” without caring whether the
+physical device is a Thorlabs APT unit, a serial unit, or an ELLx unit. What each
+category adds, and how you build a Driver on top of one, is covered in <em>Writing a Driver</em>
+below.</p>
+</section>
+</section>
+</section>
+<section id="writing-a-driver">
+<h2>Writing a Driver<a class="headerlink" href="#writing-a-driver" title="Link to this heading">#</a></h2>
+<p>Writing a Driver means giving real behaviour to the lifecycle, parameters, operations,
+and <code class="docutils literal notranslate"><span class="pre">info</span></code> from the previous section, for one specific piece of hardware. The clearest
+way to see how is to build one up from scratch, and the repository already ships the
+perfect specimen for that: <code class="docutils literal notranslate"><span class="pre">DummyInstrument</span></code>, a fake instrument with no hardware behind
+it, used in tests and as a worked example. We’ll assemble it piece by piece, then look at
+how a real Driver differs.</p>
+<section id="assembling-a-driver-step-by-step">
+<h3>Assembling a Driver, step by step<a class="headerlink" href="#assembling-a-driver-step-by-step" title="Link to this heading">#</a></h3>
+<p>A Driver is a <code class="docutils literal notranslate"><span class="pre">dataclass</span></code> that subclasses <code class="docutils literal notranslate"><span class="pre">Instrument</span></code>. Start with the class itself and
+the state it keeps:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DummyInstrument</span><span class="p">(</span><span class="n">Instrument</span><span class="p">):</span>
+    <span class="n">_param_int</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">_param_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span>
+    <span class="n">_param_bool</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">connected</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L17-L22"><code class="docutils literal notranslate"><span class="pre">dummies.py:17-22</span></code></a></em></p>
+<p>The fields prefixed with <code class="docutils literal notranslate"><span class="pre">_</span></code> are the dummy’s private state, the values a real Driver
+would read off the hardware. (<code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">desc</span></code>, and <code class="docutils literal notranslate"><span class="pre">hw_address</span></code> come from <code class="docutils literal notranslate"><span class="pre">Instrument</span></code>
+itself, so they don’t need repeating here.)</p>
+<p>Next, declare what the instrument can do. Recall that an Instrument advertises its
+capabilities in two places, <code class="docutils literal notranslate"><span class="pre">parameters</span></code> and <code class="docutils literal notranslate"><span class="pre">operations</span></code>; a Driver fills those in
+inside <code class="docutils literal notranslate"><span class="pre">__post_init__</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;param_int&quot;</span><span class="p">,</span> <span class="s2">&quot;param_str&quot;</span><span class="p">,</span> <span class="s2">&quot;param_bool&quot;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operations</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;double_int&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_int</span><span class="p">,</span>
+            <span class="s2">&quot;lowercase_str&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lowercase_str</span><span class="p">,</span>
+            <span class="s2">&quot;uppercase_str&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">uppercase_str</span><span class="p">,</span>
+            <span class="s2">&quot;toggle_bool&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">toggle_bool</span><span class="p">,</span>
+            <span class="s2">&quot;set_half_input_int&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_half_input_int</span><span class="p">,</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L24-L32"><code class="docutils literal notranslate"><span class="pre">dummies.py:24-32</span></code></a></em></p>
+<p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> is just the set of attribute names a caller may read and write;
+<code class="docutils literal notranslate"><span class="pre">operations</span></code> maps each callable name to the bound method that implements it. Everything a
+caller is allowed to do remotely has to be registered in one of these two.</p>
+<p>Now the lifecycle. The dummy has nothing to connect to, so <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">close</span></code> only flip
+a flag, but this is exactly where a real Driver would open its serial port and release
+it again:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L45-L49"><code class="docutils literal notranslate"><span class="pre">dummies.py:45-49</span></code></a></em></p>
+<p>A parameter is implemented as an ordinary property pair: a getter and a setter over the
+private field:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@property</span>
+    <span class="nd">@log_parameter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">param_int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_param_int</span>
+
+    <span class="nd">@param_int</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@log_parameter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">param_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_param_int</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L51-L59"><code class="docutils literal notranslate"><span class="pre">dummies.py:51-59</span></code></a></em></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&#64;log_parameter</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;log_operation</span></code> decorators that appear here and below are
+optional helpers from <code class="docutils literal notranslate"><span class="pre">instrument.py</span></code>: wrap a parameter accessor or an operation and
+every read, write, and call is logged with timing. They aren’t required for a working
+Driver, but they’re cheap observability, so the real drivers use them throughout.</p>
+<p>An operation is just a method, registered in <code class="docutils literal notranslate"><span class="pre">operations</span></code> above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@log_operation</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">double_int</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_param_int</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_param_int</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L81-L84"><code class="docutils literal notranslate"><span class="pre">dummies.py:81-84</span></code></a></em></p>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">info</span></code>. As described earlier, a Driver returns its <em>own</em> info class carrying its
+complete state. For the dummy that’s <code class="docutils literal notranslate"><span class="pre">DummyInfo</span></code>, which extends <code class="docutils literal notranslate"><span class="pre">InstrumentInfo</span></code> with
+the three parameter values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DummyInfo</span><span class="p">(</span><span class="n">InstrumentInfo</span><span class="p">):</span>
+    <span class="n">param_int</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">param_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">param_bool</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L10-L14"><code class="docutils literal notranslate"><span class="pre">dummies.py:10-14</span></code></a></em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DummyInfo</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DummyInfo</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">desc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">,</span>
+            <span class="n">hw_address</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hw_address</span><span class="p">,</span>
+            <span class="n">param_int</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_int</span><span class="p">,</span>
+            <span class="n">param_str</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_str</span><span class="p">,</span>
+            <span class="n">param_bool</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param_bool</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L34-L43"><code class="docutils literal notranslate"><span class="pre">dummies.py:34-43</span></code></a></em></p>
+<p>That’s a complete Driver: state, capabilities, lifecycle, accessors, and a snapshot.
+Swap the flag-flipping for real serial I/O and you have the shape of every real Driver in
+the package.</p>
+</section>
+<section id="building-on-an-instrument-category">
+<h3>Building on an Instrument category<a class="headerlink" href="#building-on-an-instrument-category" title="Link to this heading">#</a></h3>
+<p>Subclassing the base <code class="docutils literal notranslate"><span class="pre">Instrument</span></code> means wiring up everything by hand, as the dummy does.
+When your hardware fits one of the Instrument categories, you <em>can</em> subclass that instead
+and let it do some of the wiring for you. <code class="docutils literal notranslate"><span class="pre">RotatorInstrument</span></code>, for example, already
+registers the standard rotator operations and parameter in its own <code class="docutils literal notranslate"><span class="pre">__post_init__</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="s2">&quot;move_to&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operations</span><span class="p">[</span><span class="s2">&quot;move_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_by</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;degrees&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L180-L184"><code class="docutils literal notranslate"><span class="pre">instrument.py:180-184</span></code></a></em></p>
+<p>It even implements <code class="docutils literal notranslate"><span class="pre">move_to</span></code> and <code class="docutils literal notranslate"><span class="pre">move_by</span></code> for you, in terms of <code class="docutils literal notranslate"><span class="pre">degrees</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span><span class="w"> </span><span class="nf">move_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degrees</span> <span class="o">=</span> <span class="n">angle</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">move_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degrees</span> <span class="o">+=</span> <span class="n">angle</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/instrument.py#L194-L200"><code class="docutils literal notranslate"><span class="pre">instrument.py:194-200</span></code></a></em></p>
+<p>So a rotator Driver built on <code class="docutils literal notranslate"><span class="pre">RotatorInstrument</span></code> only has to supply the parts that are
+genuinely hardware-specific: how to <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">close</span></code> the connection, how to read and
+write <code class="docutils literal notranslate"><span class="pre">degrees</span></code>, and its <code class="docutils literal notranslate"><span class="pre">info</span></code>. <code class="docutils literal notranslate"><span class="pre">SerialRotator</span></code> is about as small as a real Driver gets:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SerialRotator</span><span class="p">(</span><span class="n">RotatorInstrument</span><span class="p">):</span>
+    <span class="n">_degrees</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># The hardware doesn&#39;t support position tracking</span>
+    <span class="n">_conn</span><span class="p">:</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hw_address</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="mi">115200</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;open_channel&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;motor_ready&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degrees</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset_degrees</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">degrees</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">degrees</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_degrees</span>
+
+    <span class="nd">@degrees</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">degrees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">degrees</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SRA </span><span class="si">{</span><span class="n">degrees</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_degrees</span> <span class="o">=</span> <span class="n">degrees</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L95-L132"><code class="docutils literal notranslate"><span class="pre">rotator.py:95-132</span></code></a></em></p>
+<p>It never defines <code class="docutils literal notranslate"><span class="pre">move_to</span></code>, <code class="docutils literal notranslate"><span class="pre">move_by</span></code>, or <code class="docutils literal notranslate"><span class="pre">__post_init__</span></code>; all three come from
+<code class="docutils literal notranslate"><span class="pre">RotatorInstrument</span></code>. Notice the payoff of the lifecycle rule from earlier: opening the
+serial port lives entirely in <code class="docutils literal notranslate"><span class="pre">start()</span></code>, so constructing a <code class="docutils literal notranslate"><span class="pre">SerialRotator</span></code> from config
+touches no hardware.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because construction does no I/O, an operation could be called before <code class="docutils literal notranslate"><span class="pre">start()</span></code> has run.
+If that would misbehave on your hardware, guard against it: <code class="docutils literal notranslate"><span class="pre">APTRotator</span></code> raises
+<code class="docutils literal notranslate"><span class="pre">DeviceNotStartedError</span></code> if you try to move it before its device handle exists
+(<a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L67"><code class="docutils literal notranslate"><span class="pre">rotator.py:67</span></code></a>).</p>
+</div>
+</section>
+<section id="the-drivers-that-ship-today">
+<h3>The drivers that ship today<a class="headerlink" href="#the-drivers-that-ship-today" title="Link to this heading">#</a></h3>
+<p>The package ships these Drivers, grouped by the Instrument category each one implements:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Drivers</p></th>
+<th class="head"><p>Hardware</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TimeTaggerInstrument</span></code></p></td>
+<td><p><a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/timetagger.py#L19"><code class="docutils literal notranslate"><span class="pre">SwabianTimeTagger</span></code></a></p></td>
+<td><p>Swabian Instruments time tagger</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RotatorInstrument</span></code></p></td>
+<td><p><a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L24"><code class="docutils literal notranslate"><span class="pre">APTRotator</span></code></a>, <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L96"><code class="docutils literal notranslate"><span class="pre">SerialRotator</span></code></a>, <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/rotator.py#L136"><code class="docutils literal notranslate"><span class="pre">EllxRotator</span></code></a></p></td>
+<td><p>Thorlabs APT mounts; a plain serial rotator; Thorlabs ELLx mounts</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PolarimeterInstrument</span></code></p></td>
+<td><p><a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/polarimeter.py#L95"><code class="docutils literal notranslate"><span class="pre">ArduinoPolarimeter</span></code></a></p></td>
+<td><p>Arduino-based polarimeter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Instrument</span></code> (base)</p></td>
+<td><p><a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/drivers/dummies.py#L18"><code class="docutils literal notranslate"><span class="pre">DummyInstrument</span></code></a></p></td>
+<td><p>none; test and example fixture</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The rotator row is the point made back in the orientation: one category, several Drivers.
+A <code class="docutils literal notranslate"><span class="pre">RotatorInstrument</span></code> is a rotator whatever protocol it speaks, and the rest of the
+system drives all three through the identical <code class="docutils literal notranslate"><span class="pre">degrees</span></code> / <code class="docutils literal notranslate"><span class="pre">move_to</span></code> / <code class="docutils literal notranslate"><span class="pre">move_by</span></code> interface.</p>
+</section>
+</section>
+<section id="using-a-proxyinstrument">
+<h2>Using a ProxyInstrument<a class="headerlink" href="#using-a-proxyinstrument" title="Link to this heading">#</a></h2>
+<p>Everything so far has involved holding a Driver directly. In a running Node you rarely
+do that. The real instruments are created and owned by an Instrument Provider, often on a
+different machine, and your code reaches them over the Node’s internal network through
+the Router (how that fabric works is the subject of <a class="reference internal" href="network.html"><span class="doc">Network transport: Router, Instrument Provider, Client</span></a>).</p>
+<p>What your code holds instead is a <strong>ProxyInstrument</strong>: a local stand-in that forwards
+every call across the network to the real instrument. It satisfies the same Instrument
+contract as any Driver, so your code behaves exactly as it would a local instrument,
+with no idea the hardware is somewhere else.</p>
+<pre  class="mermaid">
+        flowchart LR
+    A[Your code] --&gt; B[ProxyInstrument]
+    B -. across the Node .-&gt; C[Router]
+    C --&gt; D[Instrument Provider]
+    D --&gt; E[Instrument + hardware]
+    </pre><p>The <code class="docutils literal notranslate"><span class="pre">Router</span></code> and <code class="docutils literal notranslate"><span class="pre">InstrumentProvider</span></code> hops in the middle are exactly what <a class="reference internal" href="network.html"><span class="doc">Network transport: Router, Instrument Provider, Client</span></a>
+covers; here we only care about the two ends: your code, and the instrument it drives.</p>
+<section id="getting-a-proxyinstrument">
+<h3>Getting a ProxyInstrument<a class="headerlink" href="#getting-a-proxyinstrument" title="Link to this heading">#</a></h3>
+<p>You obtain a proxy through a <code class="docutils literal notranslate"><span class="pre">Client</span></code>. Connect one, ask a provider what it hosts, then
+request a device by name:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pqn_hardware.network.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>                                      <span class="c1"># connect to the Router</span>
+<span class="n">devices</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_available_devices</span><span class="p">(</span><span class="s2">&quot;provider1&quot;</span><span class="p">)</span>    <span class="c1"># what does provider1 host?</span>
+<span class="n">instrument</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s2">&quot;provider1&quot;</span><span class="p">,</span> <span class="s2">&quot;dummy1&quot;</span><span class="p">)</span>  <span class="c1"># a ProxyInstrument for &quot;dummy1&quot;</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/tests/messaging/client.py#L10-L20"><code class="docutils literal notranslate"><span class="pre">tests/messaging/client.py:10-20</span></code></a></em></p>
+<p><code class="docutils literal notranslate"><span class="pre">get_available_devices</span></code> returns a dict that maps each instrument the provider hosts to
+its Driver class. Run against a provider hosting a single dummy, it gives:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{&#39;dummy1&#39;: &lt;class &#39;pqn_hardware.drivers.dummies.DummyInstrument&#39;&gt;}
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_device</span></code> then hands back a <code class="docutils literal notranslate"><span class="pre">ProxyInstrument</span></code> for one of those names. Ask for a name
+the provider doesn’t host and it raises a <code class="docutils literal notranslate"><span class="pre">PacketError</span></code> carrying the provider’s reply
+(<code class="docutils literal notranslate"><span class="pre">Instrument</span> <span class="pre">'does_not_exist'</span> <span class="pre">not</span> <span class="pre">found.</span></code>), so it’s worth checking <code class="docutils literal notranslate"><span class="pre">get_available_devices</span></code>
+first when a name might be wrong.</p>
+</section>
+<section id="using-it">
+<h3>Using it<a class="headerlink" href="#using-it" title="Link to this heading">#</a></h3>
+<p>From here you use <code class="docutils literal notranslate"><span class="pre">instrument</span></code> exactly as if it were local. Call its operations, with or
+without arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">instrument</span><span class="o">.</span><span class="n">double_int</span><span class="p">()</span>                  <span class="c1"># operation, no arguments</span>
+<span class="n">instrument</span><span class="o">.</span><span class="n">set_half_input_int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>        <span class="c1"># positional argument</span>
+<span class="n">instrument</span><span class="o">.</span><span class="n">set_half_input_int</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">36</span><span class="p">)</span>  <span class="c1"># keyword argument</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/tests/messaging/client.py#L25-L39"><code class="docutils literal notranslate"><span class="pre">tests/messaging/client.py:25-39</span></code></a></em></p>
+<p>Read and write its parameters as ordinary attributes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">current</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">param_int</span>  <span class="c1"># read a parameter</span>
+<span class="n">instrument</span><span class="o">.</span><span class="n">param_int</span> <span class="o">=</span> <span class="mi">42</span>       <span class="c1"># write a parameter</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/tests/messaging/client.py#L42-L49"><code class="docutils literal notranslate"><span class="pre">tests/messaging/client.py:42-49</span></code></a></em></p>
+<p>And ask for its state snapshot through <code class="docutils literal notranslate"><span class="pre">instrument.info</span></code>, just like a local Instrument.
+Each of these quietly becomes a round-trip to the provider and back, but your code never
+has to deal with that.</p>
+</section>
+<section id="what-you-can-t-do">
+<h3>What you can’t do<a class="headerlink" href="#what-you-can-t-do" title="Link to this heading">#</a></h3>
+<p>A proxy only exposes what the instrument actually registered as a parameter or an
+operation. Assigning anything else is rejected, rather than silently creating a local
+attribute that would never reach the hardware:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">instrument</span><span class="o">.</span><span class="n">new_attr</span> <span class="o">=</span> <span class="mi">348</span>  <span class="c1"># raises AttributeError</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/tests/messaging/client.py#L53-L56"><code class="docutils literal notranslate"><span class="pre">tests/messaging/client.py:53-56</span></code></a></em></p>
+</section>
+<section id="closing">
+<h3>Closing<a class="headerlink" href="#closing" title="Link to this heading">#</a></h3>
+<p>When you’re finished, close the proxy. For a <code class="docutils literal notranslate"><span class="pre">ProxyInstrument</span></code>, <code class="docutils literal notranslate"><span class="pre">close()</span></code> tears down the
+underlying network connection rather than touching any hardware; the real instrument
+keeps running under its Instrument Provider:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">instrument</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><em>Source: <a class="reference external" href="https://github.com/PublicQuantumNetwork/pqn-hardware/blob/master/src/pqn_hardware/network/client.py#L266-L267"><code class="docutils literal notranslate"><span class="pre">client.py:266-267</span></code></a></em></p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pqn-hardware</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="network.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Network transport: Router, Instrument Provider, Client</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-instrument-model">The Instrument model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anatomy-of-a-driver">Anatomy of a Driver</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#lifecycle">Lifecycle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reporting-state-info">Reporting state: <code class="docutils literal notranslate"><span class="pre">info</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#instrument-categories">Instrument categories</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-a-driver">Writing a Driver</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#assembling-a-driver-step-by-step">Assembling a Driver, step by step</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building-on-an-instrument-category">Building on an Instrument category</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-drivers-that-ship-today">The drivers that ship today</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-a-proxyinstrument">Using a ProxyInstrument</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-proxyinstrument">Getting a ProxyInstrument</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-it">Using it</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-can-t-do">What you can’t do</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closing">Closing</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/pqn-hardware/instruments-and-drivers.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Public Quantum Network.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
